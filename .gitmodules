@@ -1,0 +1,6 @@
+[submodule "modules/elasticsearch"]
+	path = modules/elasticsearch
+	url = https://github.com/haf/puppet-elasticsearch/
+[submodule "modules/rabbitmq"]
+	path = modules/rabbitmq
+	url = https://github.com/haf/puppet-rabbitmq/
