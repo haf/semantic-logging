@@ -7,3 +7,6 @@
 [submodule "modules/logstash"]
 	path = modules/logstash
 	url = https://github.com/haf/puppet-logstash.git
+[submodule "modules/nginx"]
+	path = modules/nginx
+	url = https://github.com/haf/puppet-nginx.git
