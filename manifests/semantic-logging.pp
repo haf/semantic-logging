@@ -22,18 +22,18 @@ class kibana {
 
   file { "$kpath":
     source => 'puppet:///files/rashidkpc-Kibana-v0.1.5-44-gf5c80c3.tar.gz',
-    ensure => present
+    ensure => present,
+    mode => '0755'
   }
   
   exec { "$kpath":
-    command => "tar -zxvf $kpath",
+    command => "tar -zxvf $kpath -C $wwwpath",
     unless  => "find $wwwpath",
     creates => "$wwwpath",
     require => [
       File["$kpath"],
-      File['/var/www']
+      File['/var/www/kibana']
     ],
-    cwd     => '/var/www/',
     path    => "/usr/local/bin:/usr/sbin:/usr/bin:/bin"
   }
 
@@ -47,20 +47,12 @@ class kibana {
     ensure => present,
     require => Package['php']
   }
-  
-  file { "/var/www":
-    ensure => "directory",
-    owner  => "root",
-    group  => "root",
-    mode   => '0755'
-  }
 
   file { "$wwwpath":
     ensure => "directory",
     owner => 'kibana',
     group => 'kibana',
-    mode => '0755',
-    require => Exec["$kpath"]
+    mode => '0755'
   }
 
   group { 'kibana':
@@ -86,7 +78,7 @@ class kibana {
   include nginx
   include nginx::fcgi
   
-  nginx::site { 'nginx-default-disable':
+  nginx::site { 'default':
     ensure => absent
   }
 
