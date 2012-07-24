@@ -4,3 +4,6 @@
 [submodule "modules/rabbitmq"]
 	path = modules/rabbitmq
 	url = https://github.com/haf/puppet-rabbitmq/
+[submodule "modules/logstash"]
+	path = modules/logstash
+	url = https://github.com/haf/puppet-logstash.git
