@@ -26,15 +26,23 @@ class kibana {
     mode => '0755'
   }
   
+  file { '/var/www':
+  	ensure => 'directory',
+  	mode => '0755',
+  	owner => 'root',
+  	group => 'root'
+  }
+  
   exec { "$kpath":
-    command => "tar -zxvf $kpath -C $wwwpath",
+    command => "tar -zxvf $kpath -C /var/www && mv `ls /var/www | head -n 1` $wwwpath",
     unless  => "find $wwwpath",
     creates => "$wwwpath",
     require => [
-      File["$kpath"],
-      File['/var/www/kibana']
+      File['/var/www'],
+      File["$kpath"]
     ],
-    path    => "/usr/local/bin:/usr/sbin:/usr/bin:/bin"
+    path    => "/usr/local/bin:/usr/sbin:/usr/bin:/bin",
+    cwd     => '/var/www'
   }
 
   package { 'php':
@@ -52,7 +60,8 @@ class kibana {
     ensure => "directory",
     owner => 'kibana',
     group => 'kibana',
-    mode => '0755'
+    mode => '0755',
+    require => Exec["$kpath"]
   }
 
   group { 'kibana':
@@ -62,7 +71,7 @@ class kibana {
   user { 'kibana':
     ensure => present,
     gid => 'kibana',
-    home => '',
+    home => $wwwpath,
     managehome => true,
     require => Group['kibana'] 
   }
@@ -73,6 +82,10 @@ class kibana {
   	hasrestart => true,
   	hasstatus => true,
   	require => Package['php-fpm']
+  }
+  
+  host { 'elasticsearch':
+  	ip => '::1',
   }
 
   include nginx
@@ -86,7 +99,10 @@ class kibana {
     root            => "$wwwpath",
     fastcgi_pass    => "127.0.0.1:9000",
     server_name     => ["localhost", "$::hostname", "$::fqdn"],
-    require         => Service['php5-fpm'],
+    require         => [ 
+      Service['php5-fpm'] ,
+      Host['elasticsearch']
+    ],
     template        => 'nginx/fcgi_site.erb',
     listen          => '80'
   }
