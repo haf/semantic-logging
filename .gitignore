@@ -1,2 +1,7 @@
 .vagrant
 *.swp
+obj/
+bin/
+*.suo
+*.resharper
+packages/
