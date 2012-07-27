@@ -1,5 +1,6 @@
+stage { pre: before => Stage[main] }
 node 'semantic-logging' {
-  class { 'apt_get_update':
+  class { 'aptupdate':
     stage => pre
   }
   

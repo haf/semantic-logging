@@ -19,8 +19,8 @@ Vagrant::Config.run do |config|
 
   config.vm.provision :puppet do |puppet|
     puppet.module_path = "./modules"
-    puppet.manifests_path = "."
-    puppet.manifest_file = "manifests/semantic-logging.pp"
+    puppet.manifests_path = "./manifests"
+    puppet.manifest_file = "semantic-logging.pp"
     puppet.options = ["--fileserverconfig=/vagrant/fileserver.conf", "--verbose", "--debug" ]
   end
 end

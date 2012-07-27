@@ -1,6 +1,5 @@
 stage { pre: before => Stage[main] }
-
-class apt_get_update {
+class aptupdate {
   $sentinel = "/var/lib/apt/first-puppet-run"
   exec { "apt-get update":
     command => "/usr/bin/apt-get update && touch ${sentinel}",
