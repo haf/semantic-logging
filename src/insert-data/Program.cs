@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using NLog;
 using System.Linq;
@@ -25,8 +26,8 @@ namespace insert_data
 		{
 			var rand = new Random();
 			var levels = new[] { LogLevel.Trace, LogLevel.Debug, LogLevel.Info, LogLevel.Warn };
-			var messages = File.ReadAllLines("messages.txt");
-			var tags = File.ReadAllText("tags.txt").Split(' ').Select(t => t.Trim(new[] { '.' })).ToArray();
+			var messages = File.ReadAllLines(GetPath("messages.txt"));
+			var tags = File.ReadAllText(GetPath("tags.txt")).Split(' ').Select(t => t.Trim(new[] { '.' })).ToArray();
 
 			Console.WriteLine("Starting live data generation.");
 
@@ -42,6 +43,14 @@ namespace insert_data
 
 				Thread.Sleep(20);
 			}
+		}
+
+		static string GetPath(string filename)
+		{
+			var codeBase = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase).AbsolutePath;
+			var codeDir = Path.GetDirectoryName(codeBase);
+			var filePath = Path.Combine(codeDir, filename);
+			return filePath;
 		}
 	}
 }

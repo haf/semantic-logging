@@ -5,3 +5,4 @@ bin/
 *.suo
 *.resharper
 packages/
+_ReSharper*
